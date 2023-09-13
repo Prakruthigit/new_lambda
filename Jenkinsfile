@@ -1,3 +1,4 @@
+@Library("shared-libraries") _
 
 pipeline {
 
@@ -18,7 +19,7 @@ pipeline {
                 {
                     environmentName = "dev"
                     lambdaName = "dev_function"
-                    runPipeline(environmentName, lambdaName)
+                    lambda1.runPipeline(environmentName, lambdaName)
                 }
             }
         }
@@ -31,7 +32,7 @@ pipeline {
                 {
                     environmentName = "qa"
                     lambdaName = "qa_function"
-                    runPipeline(environmentName, lambdaName)
+                    lambda1.runPipeline(environmentName, lambdaName)
                 }
             }
         }
@@ -44,7 +45,7 @@ pipeline {
                 {
                     environmentName = "staging"
                     lambdaName = "staging_function"
-                    runPipeline(environmentName, lambdaName)
+                    lambda1.runPipeline(environmentName, lambdaName)
                 }
             }
         }
@@ -57,42 +58,11 @@ pipeline {
                 {
                     environmentName = "master"
                     lambdaName = "master_function"
-                    runPipeline(environmentName, lambdaName)
+                    lambda1.runPipeline(environmentName, lambdaName)
                 }
             }
         }
     }
 }
 
-def runPipeline(environmentName, lambdaName)
-{
-   if ("$environmentName" == 'dev' )
-    {
-            sh "mv my_deployment.zip ${environmentName}_deployment.zip"
-            withCredentials([string(credentialsId: 'access_key', variable: 'ACCESS_KEY'), string(credentialsId: 'secret_key', variable: 'SECRET_KEY')]) {
-				sh "aws lambda update-function-code --function-name ${lambdaName} --zip-file fileb://./${environmentName}_deployment.zip"
-			}
-    }
-	if ("$environmentName" == 'qa' )
-    {
-            sh "mv my_deployment.zip ${environmentName}_deployment.zip"
-            withCredentials([string(credentialsId: 'access_key', variable: 'ACCESS_KEY'), string(credentialsId: 'secret_key', variable: 'SECRET_KEY')]) {
-				sh "aws lambda update-function-code --function-name ${lambdaName} --zip-file fileb://./${environmentName}_deployment.zip"
-			}
-    }
-	if ("$environmentName" == 'staging' )
-    {
-            sh "mv my_deployment.zip ${environmentName}_deployment.zip"
-            withCredentials([string(credentialsId: 'access_key', variable: 'ACCESS_KEY'), string(credentialsId: 'secret_key', variable: 'SECRET_KEY')]) {
-				sh "aws lambda update-function-code --function-name ${lambdaName} --zip-file fileb://./${environmentName}_deployment.zip"
-			}
-    }
-	if ("$environmentName" == 'master' )
-    {
-            sh "mv my_deployment.zip ${environmentName}_deployment.zip"
-            withCredentials([string(credentialsId: 'access_key', variable: 'ACCESS_KEY'), string(credentialsId: 'secret_key', variable: 'SECRET_KEY')]) {
-				sh "aws lambda update-function-code --function-name ${lambdaName} --zip-file fileb://./${environmentName}_deployment.zip"
-			}
-    }
-}
 
