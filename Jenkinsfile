@@ -12,7 +12,7 @@ pipeline {
         stage('Deliver for development') {
             when {
                 branch 'dev'
-            }s
+            }
             steps {
                 script
                 {
